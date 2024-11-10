@@ -1,12 +1,12 @@
-# knock: 一个用Rust实现的端口敲门程序
+# knock-rs: 一个用Rust实现的端口敲门程序
 
-<img src="https://raw.githubusercontent.com/TimothyYe/knock/master/images/knock.png" width="600">
+<img src="https://raw.githubusercontent.com/TimothyYe/knock-rs/master/images/knock.png" width="600">
 
 ## 什么是端口敲门？
 
 端口敲门是一种通过在预设的一组关闭端口上生成连接尝试来从外部打开防火墙端口的方法。一旦收到正确的连接尝试序列，防火墙规则就会动态修改，允许发送连接尝试的主机通过特定端口连接。
 
-`knock` __只检测SYN包，不占用监听打开的端口__，它使用[pnet](https://docs.rs/pnet/latest/pnet/) crate来捕获原始网络数据包。
+`knock-rs` __只检测SYN包，不占用监听打开的端口__，它使用[pnet](https://docs.rs/pnet/latest/pnet/) crate来捕获原始网络数据包。
 
 这种技术的一个常见用途是通过只有在成功执行端口敲门序列后才允许访问SSH端口，从而保护对SSH服务器的连接。
 
@@ -23,7 +23,7 @@
 
 ## Download
 
-You can download the pre-built binaries from the [releases](https://github.com/TimothyYe/knock/releases) page.
+You can download the pre-built binaries from the [releases](https://github.com/TimothyYe/knock-rs/releases) page.
 
 ## 构建
 

@@ -1,14 +1,14 @@
-# knock: A port-knocking implementation in Rust
+# knock-rs: A port-knocking implementation in Rust
 
-[中文文档](https://github.com/TimothyYe/knock/blob/master/README_CN.md)
+[中文文档](https://github.com/TimothyYe/knock-rs/blob/master/README_CN.md)
 
-<img src="https://raw.githubusercontent.com/TimothyYe/knock/master/images/knock.png" width="600">
+<img src="https://raw.githubusercontent.com/TimothyYe/knock-rs/master/images/knock.png" width="600">
 
 ## What is port-knocking?
 
 Port-knocking is a method of externally opening ports on a firewall by generating a connection attempt on a set of prespecified closed ports. Once a correct sequence of connection attempts is received, the firewall rules are dynamically modified to allow the host which sent the connection attempts to connect over specific port(s). 
 
-`knock` __only detects the SYN packets and doesn't listen to the opened ports__, it uses the [pnet](https://docs.rs/pnet/latest/pnet/) crate to capture the raw packets.
+`knock-rs` __only detects the SYN packets and doesn't listen to the opened ports__, it uses the [pnet](https://docs.rs/pnet/latest/pnet/) crate to capture the raw packets.
 
 A common use of this technique is to secure connections to an SSH server by only allowing access to the SSH port after a successful port-knocking sequence has been executed.
 
@@ -25,7 +25,7 @@ Port-knocking is a simple and effective way to secure your server from unauthori
 
 ## Download
 
-You can download the pre-built binaries from the [releases](https://github.com/TimothyYe/knock/releases) page.
+You can download the pre-built binaries from the [releases](https://github.com/TimothyYe/knock-rs/releases) page.
 
 ## Build
 
