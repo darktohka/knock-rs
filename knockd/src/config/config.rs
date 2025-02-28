@@ -5,6 +5,8 @@ pub struct Rule {
     pub name: String,
     pub sequence: Vec<i32>,
     pub command: String,
+    pub setup: Option<String>,
+    pub teardown: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

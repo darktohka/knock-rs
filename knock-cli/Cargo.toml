@@ -2,16 +2,15 @@
 name = "knock-cli"
 version = "0.1.0"
 edition = "2024"
-authors = ["Timothy Ye"]
-homepage = "https://github.com/TimothyYe/knock"
-repository = "https://github.com/TimothyYe/knock"
+authors = ["Derzsi Daniel", "Timothy Ye"]
+homepage = "https://github.com/darktohka/knock-rs"
+repository = "https://github.com/darktohka/knock-rs"
 description = "A port knocking client"
 license = "Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 log = "0.4.26"
+simple_logger = "5.0.0"
 argh = "0.1.13"
 serde = { version = "1.0.218", features = ["derive"] }
 serde_json = "1.0.139"

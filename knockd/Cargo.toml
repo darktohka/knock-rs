@@ -2,18 +2,17 @@
 name = "knockd"
 version = "0.1.0"
 edition = "2024"
-authors = ["Timothy Ye"]
-homepage = "https://github.com/TimothyYe/knock"
-repository = "https://github.com/TimothyYe/knock"
+authors = ["Derzsi Daniel", "Timothy Ye"]
+homepage = "https://github.com/darktohka/knock-rs"
+repository = "https://github.com/darktohka/knock-rs"
 description = "A port knocking server written in Rust"
 license = "Apache-2.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 pnet = { version = "0.35.0", default-features = false, features = ["std"] }
+ctrlc = { version = "3.4.5", features = ["termination"] }
 serde = { version = "1.0.218", default-features = false, features = ["std", "derive"] }
 serde_json = "1.0.139"
 log = "0.4.26"
+simple_logger = "5.0.0"
 argh = "0.1.13"
-pretty_env_logger = "0.5.0"

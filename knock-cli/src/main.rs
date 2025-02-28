@@ -15,26 +15,19 @@ struct Args {
         description = "path to the configuration file"
     )]
     config: String,
-
     #[argh(option, short = 'r', description = "the port knocking rule to execute")]
-    rule: Option<String>,
+    rule: String,
+    #[argh(option, short = 'h', description = "the host to connect to")]
+    host: String,
 }
 
 fn main() -> Result<(), Error> {
-    let args: Args = argh::from_env();
+    simple_logger::init().expect("Failed to initialize logger");
 
-    let rule = match args.rule {
-        Some(rule) => rule,
-        None => {
-            return Err(Error::new(
-                std::io::ErrorKind::InvalidInput,
-                "No rule specified.",
-            ));
-        }
-    };
+    let args: Args = argh::from_env();
 
     let config = config::load_config(&args.config)?;
     let executor = rule::RuleExecutor::new(config);
 
-    executor.run(&rule)
+    executor.run(&args.rule, &args.host)
 }

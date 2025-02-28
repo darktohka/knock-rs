@@ -1,4 +1,7 @@
+use std::io::Error;
+
 use crate::sequence::SequenceDetector;
+use log::info;
 use pnet::datalink::Channel::Ethernet;
 use pnet::datalink::{self, NetworkInterface};
 use pnet::packet::ethernet::{EtherTypes, EthernetPacket};
@@ -19,7 +22,7 @@ impl Server {
         })
     }
 
-    pub fn start(&mut self) {
+    pub fn start(&mut self) -> Result<(), Error> {
         // Start the sequence detector thread
         self.detector.start();
 
@@ -32,10 +35,7 @@ impl Server {
         let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
             Ok(Ethernet(tx, rx)) => (tx, rx),
             Ok(_) => panic!("Unhandled channel type"),
-            Err(e) => panic!(
-                "An error occurred when creating the data link channel: {}",
-                e
-            ),
+            Err(e) => return Err(e),
         };
 
         loop {
@@ -66,9 +66,13 @@ impl Server {
                         _ => {}
                     }
                 }
-                Err(e) => {
-                    panic!("An error occurred while reading: {}", e);
-                }
+                Err(e) => match e.kind() {
+                    std::io::ErrorKind::Interrupted => {
+                        info!("Packet sniffing interrupted, exiting...");
+                        return Ok(());
+                    }
+                    _ => panic!("An error occurred while reading: {}", e),
+                },
             }
         }
     }

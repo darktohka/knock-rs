@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Rule {
     pub name: String,
-    pub host: String,
     pub sequence: Vec<i32>,
 }
 

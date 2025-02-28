@@ -21,12 +21,12 @@ impl RuleExecutor {
         RuleExecutor { rules }
     }
 
-    pub fn run(&self, name: &str) -> Result<(), Error> {
+    pub fn run(&self, name: &str, host: &str) -> Result<(), Error> {
         if let Some(rule) = self.rules.get(name) {
             info!("Executing rule: {}", rule.name);
             // Iterate over the ports and attempt to connect to each
             for port in rule.sequence.iter() {
-                let address = format!("{}:{}", rule.host, port);
+                let address = format!("{}:{}", host, port);
                 let addr: Vec<SocketAddr> = address.to_socket_addrs()?.collect();
                 info!("Knocking at: {}", addr[0]);
 
