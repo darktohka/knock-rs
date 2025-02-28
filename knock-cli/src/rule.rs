@@ -1,8 +1,8 @@
 use crate::config::Config;
 use crate::config::Rule;
-use anyhow::Result;
-use log::{error, info};
+use log::info;
 use std::collections::HashMap;
+use std::io::Error;
 use std::net::{SocketAddr, TcpStream, ToSocketAddrs};
 use std::time::Duration;
 
@@ -21,7 +21,7 @@ impl RuleExecutor {
         RuleExecutor { rules }
     }
 
-    pub fn run(&self, name: &str) -> Result<()> {
+    pub fn run(&self, name: &str) -> Result<(), Error> {
         if let Some(rule) = self.rules.get(name) {
             info!("Executing rule: {}", rule.name);
             // Iterate over the ports and attempt to connect to each
@@ -37,8 +37,10 @@ impl RuleExecutor {
                 }
             }
         } else {
-            error!("Rule not found: {}", name);
-            return Ok(());
+            return Err(Error::new(
+                std::io::ErrorKind::NotFound,
+                format!("Rule not found: {}", name),
+            ));
         }
 
         info!("Rule execution complete.");

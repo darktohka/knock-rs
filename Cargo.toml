@@ -2,3 +2,8 @@
 members = ["knockd", "knock-cli"]
 resolver = "2"
 exclude = ["images/**"]
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+strip = true

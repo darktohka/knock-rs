@@ -1,7 +1,5 @@
-use anyhow::Result;
-use clap::Parser;
-use log::LevelFilter;
-use pretty_env_logger::env_logger::Builder;
+use std::io::Error;
+
 use sequence::PortSequenceDetector;
 use server::Server;
 
@@ -9,22 +7,22 @@ mod config;
 mod executor;
 mod sequence;
 mod server;
+use argh::FromArgs;
 
-#[derive(Parser, Debug)]
-#[command(version = env!("VERSION"), about, long_about = "A port knocking server written in Rust")]
+#[derive(FromArgs)]
+#[argh(description = "A port knocking server written in Rust")]
 struct Args {
-    /// Path to the configuration file
-    #[arg(short, long, default_value = "config.yaml")]
+    #[argh(
+        option,
+        short = 'c',
+        default = "String::from(\"config.json\")",
+        description = "path to the configuration file"
+    )]
     config: String,
 }
 
-fn main() -> Result<()> {
-    let args = Args::parse();
-
-    // Initialize the logger
-    Builder::new()
-        .filter_level(LevelFilter::Info) // Set default log level to Info
-        .init();
+fn main() -> Result<(), Error> {
+    let args: Args = argh::from_env();
 
     // Load the configuration
     let config = config::load_config(&args.config)?;

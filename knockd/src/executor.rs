@@ -1,7 +1,6 @@
-use anyhow::Result;
-use std::process::Command;
+use std::{io::Error, process::Command};
 
-pub fn execute_command(command: &str) -> Result<()> {
+pub fn execute_command(command: &str) -> Result<(), Error> {
     let mut parts = command.split_whitespace();
     let command = parts.next().unwrap();
     let args = parts;

@@ -37,29 +37,25 @@ cargo build --release
 
 ### Server Configuration
 
-Create a configuration file named `config.yaml` in the same directory as the `knockd` binary.
+Create a configuration file named `config.json` in the same directory as the `knockd` binary.
 
-```yaml
-interface: "eth0"
-timeout: 5
-rules:
-  - name: "enable_ssh"
-    command: "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT"
-    sequence:
-      - 15523
-      - 17767
-      - 32768
-      - 28977
-      - 51234
-  - name: "disable_ssh"
-    command: "/usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT"
-    sequence:
-      - 51234
-      - 28977
-      - 32768
-      - 17767
-      - 15523
-```
+```json
+{
+  "interface": "eth0",
+  "timeout": 5,
+  "rules": [
+    {
+      "name": "enable_ssh",
+      "command": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "sequence": [15523, 17767, 32768, 28977, 51234]
+    },
+    {
+      "name": "disable_ssh",
+      "command": "/usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "sequence": [51234, 28977, 32768, 17767, 15523]
+    }
+  ]
+}```
 
 - `interface`: The network interface to listen on
 - `timeout`: The timeout in seconds to wait for the client to send the complete sequence
@@ -70,27 +66,25 @@ rules:
 
 ### Client Configuration
 
-Create a configuration file named `config.yaml` in the same directory as the `knock-cli` binary. 
+Create a configuration file named `config.json` in the same directory as the `knock-cli` binary. 
 
 __Do make sure that the client has the same sequence as the server.__
 
-```yaml
-rules:
-  - name: "enable_ssh"
-    host: "example.com"
-    sequence:
-      - 12345
-      - 54321
-      - 32768
-      - 18933
-  - name: "disable_ssh"
-    host: "example.com"
-    sequence:
-      - 18933
-      - 32768
-      - 54321
-      - 12345
-```
+```json
+{
+  "rules": [
+    {
+      "name": "enable_ssh",
+      "host": "example.com",
+      "sequence": [12345, 54321, 32768, 18933]
+    },
+    {
+      "name": "disable_ssh",
+      "host": "example.com",
+      "sequence": [18933, 32768, 54321, 12345]
+    }
+  ]
+}```
 
 - `rules`: The rules to apply when the correct sequence is sent
 	- `name`: The name of the rule, the name doesn't need to match the server's rule name, but the sequence does. And also, the name should be unique in the client's configuration file
@@ -102,25 +96,25 @@ rules:
 ### Server
 
 ```bash
-./knockd -c config.yaml
+./knockd -c config.json
 ```
 
-The default config path is `config.yaml`, you can also specify the config file path by using the `-c` option.
+The default config path is `config.json`, you can also specify the config file path by using the `-c` option.
 
 ### Client
 
 ```bash
-./knock-cli -c config.yaml -r enable_ssh
+./knock-cli -c config.json -r enable_ssh
 ```
 
-The default config path is `config.yaml`, you can also specify the config file path by using the `-c` option.
+The default config path is `config.json`, you can also specify the config file path by using the `-c` option.
 
 The `-r` option is used to specify the rule name to knock.
 
 ## Run Server as docker container
 
 ```bash
-docker run --network host --cap-add=NET_RAW --cap-add=NET_BIND_SERVICE --cap-add=NET_ADMIN -d --restart=always --name=knockd -v ./config.yaml:/config.yaml:ro ghcr.io/timothyye/knockd:latest
+docker run --network host --cap-add=NET_RAW --cap-add=NET_BIND_SERVICE --cap-add=NET_ADMIN -d --restart=always --name=knockd -v ./config.json:/config.json:ro ghcr.io/timothyye/knockd:latest
 ```
 Since the server needs to listen to the raw packets, you need to add the `NET_RAW`, `NET_BIND_SERVICE` and `NET_ADMIN` capabilities to the container.
 

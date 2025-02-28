@@ -1,40 +1,40 @@
-use anyhow::Result;
-use clap::Parser;
-use log::{error, LevelFilter};
-use pretty_env_logger::env_logger::Builder;
+use std::io::Error;
 
 mod config;
 mod rule;
 
-#[derive(Parser, Debug)]
-#[command(version = env!("VERSION"), about, long_about = "A port knocking console application written in Rust")]
+use argh::FromArgs;
+
+#[derive(FromArgs)]
+#[argh(description = "A port knocking console application written in Rust")]
 struct Args {
-    /// Path to the configuration file
-    #[arg(short, long, default_value = "config.yaml")]
+    #[argh(
+        option,
+        short = 'c',
+        default = "String::from(\"config.json\")",
+        description = "path to the configuration file"
+    )]
     config: String,
-    /// The port knocking rule to execute
-    #[arg(short, long)]
+
+    #[argh(option, short = 'r', description = "the port knocking rule to execute")]
     rule: Option<String>,
 }
 
-fn main() -> Result<()> {
-    let args = Args::parse();
-
-    Builder::new()
-        .filter_level(LevelFilter::Info) // Set default log level to Info
-        .init();
+fn main() -> Result<(), Error> {
+    let args: Args = argh::from_env();
 
     let rule = match args.rule {
         Some(rule) => rule,
         None => {
-            error!("No rule specified.");
-            return Ok(());
+            return Err(Error::new(
+                std::io::ErrorKind::InvalidInput,
+                "No rule specified.",
+            ));
         }
     };
 
     let config = config::load_config(&args.config)?;
     let executor = rule::RuleExecutor::new(config);
-    executor.run(&rule)?;
 
-    Ok(())
+    executor.run(&rule)
 }
