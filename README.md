@@ -1,8 +1,6 @@
 # knock-rs: A port-knocking implementation in Rust
 
-[中文文档](https://github.com/TimothyYe/knock-rs/blob/master/README_CN.md)
-
-<img src="https://raw.githubusercontent.com/TimothyYe/knock-rs/master/images/knock.png" width="600">
+<img src="https://raw.githubusercontent.com/darktohka/knock-rs/master/images/knock.png" width="600">
 
 ## What is port-knocking?
 
@@ -25,7 +23,7 @@ Port-knocking is a simple and effective way to secure your server from unauthori
 
 ## Download
 
-You can download the pre-built binaries from the [releases](https://github.com/TimothyYe/knock-rs/releases) page.
+You can download the pre-built binaries from the [releases](https://github.com/darktohka/knock-rs/releases) page.
 
 ## Build
 
@@ -119,7 +117,7 @@ The `-h` option is used to specify the host to knock on.
 ## Run Server as docker container
 
 ```bash
-docker run --network host --cap-add=NET_RAW --cap-add=NET_BIND_SERVICE --cap-add=NET_ADMIN -d --restart=always --name=knockd -v ./config.json:/config.json:ro ghcr.io/timothyye/knockd:latest
+docker run --network host --cap-add=NET_RAW --cap-add=NET_BIND_SERVICE --cap-add=NET_ADMIN -d --restart=always --name=knockd -v ./config.json:/config.json:ro ghcr.io/darktohka/knockd:latest
 ```
 
 Since the server needs to listen to the raw packets, you need to add the `NET_RAW`, `NET_BIND_SERVICE` and `NET_ADMIN` capabilities to the container.
