@@ -1,7 +1,7 @@
 [package]
 name = "knockd"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 authors = ["Derzsi Daniel", "Timothy Ye"]
 homepage = "https://github.com/darktohka/knock-rs"
 repository = "https://github.com/darktohka/knock-rs"
