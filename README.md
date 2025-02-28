@@ -55,7 +55,8 @@ Create a configuration file named `config.json` in the same directory as the `kn
       "sequence": [51234, 28977, 32768, 17767, 15523]
     }
   ]
-}```
+}
+```
 
 - `interface`: The network interface to listen on
 - `timeout`: The timeout in seconds to wait for the client to send the complete sequence
@@ -84,7 +85,8 @@ __Do make sure that the client has the same sequence as the server.__
       "sequence": [18933, 32768, 54321, 12345]
     }
   ]
-}```
+}
+```
 
 - `rules`: The rules to apply when the correct sequence is sent
 	- `name`: The name of the rule, the name doesn't need to match the server's rule name, but the sequence does. And also, the name should be unique in the client's configuration file
