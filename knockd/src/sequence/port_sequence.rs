@@ -11,10 +11,10 @@ use log::{error, info};
 #[derive(Debug)]
 pub struct PortSequenceDetector {
     timeout: u64,
-    sequence_set: HashSet<i32>,
-    sequence_rules: HashMap<String, Vec<i32>>,
+    sequence_set: HashSet<u16>,
+    sequence_rules: HashMap<String, Vec<u16>>,
     rules_map: HashMap<String, String>,
-    client_sequences: Arc<Mutex<HashMap<String, Vec<i32>>>>,
+    client_sequences: Arc<Mutex<HashMap<String, Vec<u16>>>>,
     client_timeout: Arc<Mutex<HashMap<String, u64>>>,
 }
 
@@ -50,7 +50,7 @@ impl PortSequenceDetector {
 }
 
 impl SequenceDetector for PortSequenceDetector {
-    fn add_sequence(&mut self, client_ip: String, sequence: i32) {
+    fn add_sequence(&mut self, client_ip: String, sequence: u16) {
         // check if the sequence is in the set
         if !self.sequence_set.contains(&sequence) {
             return;

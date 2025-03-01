@@ -1,13 +1,10 @@
 use std::io::Error;
 
 use crate::sequence::SequenceDetector;
-use log::info;
-use pnet::datalink::Channel::Ethernet;
-use pnet::datalink::{self, NetworkInterface};
-use pnet::packet::ethernet::{EtherTypes, EthernetPacket};
-use pnet::packet::ip::IpNextHeaderProtocols;
-use pnet::packet::tcp::TcpPacket;
-use pnet::packet::Packet;
+use crate::server::parser::parse_ethernet_ip_packet;
+use log::warn;
+
+use pcap::{Capture, Device};
 
 pub struct Server {
     interface_name: String,
@@ -26,54 +23,39 @@ impl Server {
         // Start the sequence detector thread
         self.detector.start();
 
-        let interface = datalink::interfaces()
+        // Find the network device by name
+        let device = Device::list()
+            .unwrap()
             .into_iter()
-            .find(|iface: &NetworkInterface| iface.name == self.interface_name)
+            .find(|d| d.name == self.interface_name)
             .expect("Failed to get interface");
 
-        // Create a channel to receive on
-        let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
-            Ok(Ethernet(tx, rx)) => (tx, rx),
-            Ok(_) => panic!("Unhandled channel type"),
-            Err(e) => return Err(e),
-        };
+        // Open the capture handle
+        let mut cap = Capture::from_device(device)
+            .unwrap()
+            .promisc(true)
+            .snaplen(256)
+            .timeout(100)
+            .open()
+            .unwrap();
 
-        loop {
-            match rx.next() {
-                Ok(packet) => {
-                    let packet = EthernetPacket::new(packet).unwrap();
-                    match packet.get_ethertype() {
-                        EtherTypes::Ipv4 => {
-                            if let Some(header) =
-                                pnet::packet::ipv4::Ipv4Packet::new(packet.payload())
-                            {
-                                if header.get_next_level_protocol() == IpNextHeaderProtocols::Tcp {
-                                    if let Some(tcp) = TcpPacket::new(header.payload()) {
-                                        // Check for SYN flag and that ACK flag is not set
-                                        if tcp.get_flags() & pnet::packet::tcp::TcpFlags::SYN != 0
-                                            && tcp.get_flags() & pnet::packet::tcp::TcpFlags::ACK
-                                                == 0
-                                        {
-                                            self.detector.add_sequence(
-                                                header.get_source().to_string(),
-                                                tcp.get_destination() as i32,
-                                            );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        _ => {}
-                    }
-                }
-                Err(e) => match e.kind() {
-                    std::io::ErrorKind::Interrupted => {
-                        info!("Packet sniffing interrupted, exiting...");
-                        return Ok(());
-                    }
-                    _ => panic!("An error occurred while reading: {}", e),
-                },
+        // Apply a BPF filter to capture only SYN packets
+        // Right now, BPF filters do not support introspecting IPv6 packets...
+        // Hopefully this will be fixed later. I'm putting this here in case they fix it.
+        cap.filter(
+            "(ip or ip6) and tcp[tcpflags] & (tcp-syn|tcp-ack) == tcp-syn",
+            true,
+        )
+        .unwrap();
+
+        while let Ok(packet) = cap.next_packet() {
+            if let Some(info) = parse_ethernet_ip_packet(&packet) {
+                self.detector
+                    .add_sequence(info.source_ip, info.destination_port);
             }
         }
+
+        warn!("Packet sniffing interrupted.");
+        Ok(())
     }
 }

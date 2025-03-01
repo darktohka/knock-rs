@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct Rule {
     pub name: String,
     pub host: Option<String>,
-    pub sequence: Vec<i32>,
+    pub sequence: Vec<u16>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
