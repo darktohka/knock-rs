@@ -78,6 +78,7 @@ Create a configuration file named `config.json` in the same directory as the `kn
   "rules": [
     {
       "name": "enable_ssh",
+      "host": "example.com",
       "sequence": [12345, 54321, 32768, 18933]
     },
     {
@@ -90,6 +91,7 @@ Create a configuration file named `config.json` in the same directory as the `kn
 
 - `rules`: The rules to apply when the correct sequence is sent
   - `name`: The name of the rule, the name doesn't need to match the server's rule name, but the sequence does. And also, the name should be unique in the client's configuration file
+  - `host`: Optional. The host address to knock on
   - `sequence`: The sequence of ports to knock
 
 ## Usage
@@ -112,7 +114,7 @@ The default config path is `config.json`, you can also specify the config file p
 
 The `-r` option is used to specify the rule name to knock.
 
-The `-h` option is used to specify the host to knock on.
+The `-h` option is used to specify the host to knock on. If this option is specified, it will take precedence over the default host in the rule config.
 
 ## Run Server as docker container
 

@@ -18,7 +18,7 @@ struct Args {
     #[argh(option, short = 'r', description = "the port knocking rule to execute")]
     rule: String,
     #[argh(option, short = 'h', description = "the host to connect to")]
-    host: String,
+    host: Option<String>,
 }
 
 fn main() -> Result<(), Error> {
@@ -29,5 +29,5 @@ fn main() -> Result<(), Error> {
     let config = config::load_config(&args.config)?;
     let executor = rule::RuleExecutor::new(config);
 
-    executor.run(&args.rule, &args.host)
+    executor.run(&args.rule, args.host)
 }
