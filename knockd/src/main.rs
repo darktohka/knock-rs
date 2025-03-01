@@ -19,7 +19,7 @@ struct Args {
     #[argh(
         option,
         short = 'c',
-        default = "String::from(\"config.json\")",
+        default = "String::from(\"/etc/knockd/config.json\")",
         description = "path to the configuration file"
     )]
     config: String,
