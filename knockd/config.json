@@ -1,15 +1,15 @@
 {
   "interface": "eth0",
-  "timeout": 5,
+  "timeout": 5000,
   "rules": [
     {
       "name": "enable_ssh",
-      "command": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "activate": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
       "sequence": [15523, 17767, 32768, 28977, 51234]
     },
     {
       "name": "disable_ssh",
-      "command": "/usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "activate": "/usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
       "sequence": [51234, 28977, 32768, 17767, 15523]
     }
   ]

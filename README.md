@@ -40,31 +40,29 @@ Create a configuration file named `/etc/knockd/config.json`:
 ```json
 {
   "interface": "eth0",
-  "timeout": 5,
+  "timeout": 5000,
   "rules": [
     {
       "name": "enable_ssh",
-      "command": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "activate": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "deactivate": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
       "setup": "iptables -A INPUT -p tcp --dport 22 -j DROP",
       "teardown": "iptables -D INPUT -p tcp --dport 22 -j DROP",
       "sequence": [15523, 17767, 32768, 28977, 51234]
-    },
-    {
-      "name": "disable_ssh",
-      "command": "/usr/sbin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
-      "sequence": [51234, 28977, 32768, 17767, 15523]
     }
   ]
 }
 ```
 
 - `interface`: The network interface to listen on
-- `timeout`: The timeout in seconds to wait for the client to send the complete sequence
+- `timeout`: The timeout in milliseconds to wait for the client to send the complete sequence
 - `rules`: The rules to apply when the correct sequence is received
   - `name`: The name of the rule
-  - `command`: The command to execute when the correct sequence is received. `%IP%` will be replaced with the client's IP address
-  - `setup`: The command to execute when starting the `knockd` daemon. This can be used to block the port by default
-  - `teardown`: The command to execute when stopping the `knockd` daemon. This can be used to allow ports to be used without knocking again
+  - `activate`: The command to execute when the correct sequence is received. `%IP%` will be replaced with the client's IP address
+  - `deactivate`: The command to execute when the rule times out. `%IP%` will be replaced with the client's IP address. Optional.
+  - `timeout`: The timeout in milliseconds for the rule to deactivate. Optional.
+  - `setup`: The command to execute when starting the `knockd` daemon. This can be used to block the port by default. Optional.
+  - `teardown`: The command to execute when stopping the `knockd` daemon. This can be used to allow ports to be used without knocking again. Optional.
   - `sequence`: The sequence of ports that the client should knock
 
 ### Client Configuration
