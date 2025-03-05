@@ -46,6 +46,7 @@ Create a configuration file named `/etc/knockd/config.json`:
       "name": "enable_ssh",
       "activate": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
       "deactivate": "/usr/sbin/iptables -I INPUT -s %IP% -p tcp --dport 22 -j ACCEPT",
+      "timeout": 21600,
       "setup": "iptables -A INPUT -p tcp --dport 22 -j DROP",
       "teardown": "iptables -D INPUT -p tcp --dport 22 -j DROP",
       "sequence": [15523, 17767, 32768, 28977, 51234]
