@@ -9,7 +9,7 @@ use crate::sequence::SequenceDetector;
 use log::{error, info};
 
 // Default rule timeout is 6 hours
-pub const DEFAULT_RULE_TIMEOUT: u128 = 6 * 60 * 60;
+pub const DEFAULT_RULE_TIMEOUT: u128 = 6 * 60 * 60 * 1000;
 
 #[derive(Debug, Clone)]
 pub struct RuleCommands {
