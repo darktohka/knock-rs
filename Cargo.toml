@@ -1,5 +1,5 @@
 [workspace]
-members = ["knockd", "knock-cli"]
+members = ["knockd", "knock"]
 resolver = "2"
 exclude = ["images/**"]
 

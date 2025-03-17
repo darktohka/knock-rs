@@ -106,7 +106,7 @@ The default config path is `/etc/knockd/config.json`, you can also specify the c
 ### Client
 
 ```bash
-./knock-cli -c config.json -r enable_ssh -h example.com
+./knock -c config.json -r enable_ssh -h example.com
 ```
 
 The default config path is `/etc/knockd/config.json`, you can also specify the config file path by using the `-c` option.
@@ -134,7 +134,7 @@ iptables -A INPUT -p tcp --dport 22 -j DROP
 Use the following command to enable the SSH port on the server:
 
 ```bash
-./knock-cli -r enable_ssh -h example.com
+./knock -r enable_ssh -h example.com
 ```
 
 After the correct sequence is sent, the SSH port will be opened for the client's IP address. Now you can connect to the SSH server.
@@ -142,5 +142,5 @@ After the correct sequence is sent, the SSH port will be opened for the client's
 To close the SSH port, use the following command:
 
 ```bash
-./knock-cli -r disable_ssh -h example.com
+./knock -r disable_ssh -h example.com
 ```
