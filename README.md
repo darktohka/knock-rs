@@ -115,6 +115,10 @@ The `-r` option is used to specify the rule name to knock.
 
 The `-h` option is used to specify the host to knock on. If this option is specified, it will take precedence over the default host in the rule config.
 
+The `-q` option can be used to suppress all output to the console.
+
+The `-s` option can be used in tandem with the `-h` host to knock a host without requiring a conifg file. If these two options are specified, the knock will be sent to the specified host (`-h`) using the specified sequence (`-s`).
+
 ## Run Server as docker container
 
 ```bash
@@ -143,4 +147,16 @@ To close the SSH port, use the following command:
 
 ```bash
 ./knock -r disable_ssh -h example.com
+```
+
+To knock without using a config file:
+
+```bash
+./knock -s '12345,67952,40320' -h example.com
+```
+
+To knock with no output to the console:
+
+```bash
+./knock -q
 ```

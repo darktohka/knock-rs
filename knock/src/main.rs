@@ -21,7 +21,12 @@ struct Args {
     sequence: Option<String>,
     #[argh(option, short = 'h', description = "the host to connect to")]
     host: Option<String>,
-    #[argh(option, short = 'q', description = "suppress output")]
+    #[argh(
+        option,
+        default = "false",
+        short = 'q',
+        description = "suppress output"
+    )]
     quiet: bool,
 }
 
