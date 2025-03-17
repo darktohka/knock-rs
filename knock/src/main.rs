@@ -17,8 +17,12 @@ struct Args {
     config: String,
     #[argh(option, short = 'r', description = "the port knocking rule to execute")]
     rule: String,
+    #[argh(option, short = 's', description = "the sequence to play")]
+    sequence: Option<String>,
     #[argh(option, short = 'h', description = "the host to connect to")]
     host: Option<String>,
+    #[argh(option, short = 'q', description = "suppress output")]
+    quiet: bool,
 }
 
 fn main() -> Result<(), Error> {
@@ -26,8 +30,18 @@ fn main() -> Result<(), Error> {
 
     let args: Args = argh::from_env();
 
+    if let Some(sequence) = args.sequence {
+        if let Some(host) = args.host {
+            let sequence: Vec<u16> = sequence
+                .split(',')
+                .map(|s| s.parse().expect("Invalid sequence"))
+                .collect();
+            return rule::execute_sequence(host, &sequence, args.quiet);
+        }
+    }
+
     let config = config::load_config(&args.config)?;
-    let executor = rule::RuleExecutor::new(config);
+    let executor = rule::RuleExecutor::new(config, args.quiet);
 
     executor.run(&args.rule, args.host)
 }
