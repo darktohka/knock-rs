@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build the binary for x86_64
-        run: RUSTFLAGS="-C target-feature=+crt-static" ~/.cargo/bin/cross build --bin knock --profile release-lto --target x86_64-unknown-linux-gnu
+        run: ~/.cargo/bin/cross build --bin knock --profile release-lto --target x86_64-unknown-linux-gnu
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build the binary for arm64
-        run: RUSTFLAGS="-C target-feature=+crt-static" ~/.cargo/bin/cross build --bin knock --profile release-lto --target aarch64-unknown-linux-gnu
+        run: ~/.cargo/bin/cross build --bin knock --profile release-lto --target aarch64-unknown-linux-gnu
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -66,7 +66,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Build the binary for armv7
-        run: RUSTFLAGS="-C target-feature=+crt-static" ~/.cargo/bin/cross build --bin knock --profile release-lto --target armv7-unknown-linux-gnueabihf
+        run: ~/.cargo/bin/cross build --bin knock --profile release-lto --target armv7-unknown-linux-gnueabihf
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
